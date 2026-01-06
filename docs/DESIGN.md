@@ -12,14 +12,14 @@
 - capacities[numTables] = {2,2,4,4,6,6,8,8}
 
 ### Reservation State
-- reservationName[numTables][numSlots] : string
+- resName[numTables][numSlots] : string
   - AVAILABLE means unreserved
   - otherwise stores customer name
 - partySize[numTables][numSlots] : int
   - 0 means unreserved
   - otherwise stores party size
 
-## 3. Index Mapping (Critical)
+## 3. Index Mapping 
 ### Table Number to Index
 - Input: tableNumber in [1..8]
 - Output: tableIndex = tableNumber - 1
