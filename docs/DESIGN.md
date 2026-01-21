@@ -45,7 +45,7 @@
 - int slotToHour(int slot)
   - returns hour 12..23, or -1 if invalid
 
-- bool isAvailable(int tableIdx, int slot)
+- bool ailable(int tableIdx, int slot)
   - true if reservationName[tableIdx][slot] == AVAILABLE
 
 ### Initialization
