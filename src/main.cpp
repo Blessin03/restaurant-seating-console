@@ -44,6 +44,8 @@ void makeRes();
 
 void checkAvailabilityAtHour();
 
+void displayRes();
+void hourlyOccupancy();
 
 int main() {
    
@@ -55,19 +57,32 @@ int main() {
 
     
     int choice = 0;
+
+   
+
+    do{
     cout << "Welcome to the Restaurant Reservation System\n";
-    cout << "1.Exit \n";
-    cout << "2.Cancel a Reservation \n";
-    cout <<"3. Check availability  by the hour\n";
+    cout << "1. Make New Reservation\n";
+    cout << "2. Cancel Existing Reservation \n";
+    cout <<"3. Check Availability for a Specific Time\n";
+    cout <<"4. Display All Reservations for a Specific Table\n";
+    cout << "5. Hourly Availability Report\n";
+    cout << "0. Exit\n";
+
+
     cout << "Please enter your choice: ";
     cin >> choice;
-
+    } while (choice != 0);
+    
 
 
     switch (choice)
     {
-    case    1:
+    case 0:
+        cout << "Thank you for using the Restaurant Reservation System. Goodbye!\n";
         return 0;
+    case    1:
+        makeRes();
         break;
     case    2:
         cancelRes();
@@ -75,12 +90,22 @@ int main() {
     case    3:
         checkAvailabilityAtHour();
         break;
+    case    4:
+        displayRes();
+        break;
+     case    5:
+        hourlyOccupancy();
+        break;
     default:
+        cout << "Invalid choice. choose a number between inclusive of  0-5 please.\n";
         break;
     }
-    
+
     return 0;
 }
+
+
+
 
 
 void initReservation(){
@@ -200,4 +225,13 @@ void checkAvailabilityAtHour(){
 
 int tableNumToIndex(int tableNum){
   return  tableNum < 1 || tableNum > numTables ? -1: tableNum -1;
+}
+
+
+void displayRes(){
+ cout<< "ptototypee\n";
+}
+
+void hourlyOccupancy(){
+    cout << "prototype\n";
 }
