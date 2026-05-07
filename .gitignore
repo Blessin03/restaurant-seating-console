@@ -1,11 +1,72 @@
-*.exe
-*.o
-*.obj
-*.out
-build/
-bin/
-out/
-.vscode/
-.idea/
+# =====================
+# Jalen's .gitignore
+# ===================
+
+
+# =====================
+# OS files
+# =====================
 .DS_Store
 Thumbs.db
+
+# =====================
+# Editor / IDE files
+# =====================
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# =====================
+# Logs
+# =====================
+*.log
+logs/
+
+# =====================
+# Dependencies
+# =====================
+node_modules/
+vendor/
+
+# =====================
+# Environment variables
+# =====================
+.env
+.env.*
+!.env.example
+
+# =====================
+# Build / output
+# =====================
+dist/
+build/
+out/
+
+# =====================
+# Python
+# =====================
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+venv/
+
+# =====================
+# Java
+# =====================
+*.class
+*.jar
+
+# =====================
+# Testing / coverage
+# =====================
+coverage/
+
+# =====================
+# Temporary files
+# =====================
+tmp/
+temp/
+.cache/
