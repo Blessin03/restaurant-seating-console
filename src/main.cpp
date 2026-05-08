@@ -287,29 +287,51 @@ int tableIdx = tableNumToIndex(table);
 
 void checkAvailabilityAtHour(){
     int hour;
+
+    // ask for hour
     cout << "Which hour would you like to check availability for? (12-22): \n";
     cin >> hour;
 
-    hour = hourToSlot(hour);
+    //CHECKING if input failed
+    if(cin.fail()){
+        cin.clear();
+        cin.ignore(1000, '\n');
+        cout << "Invalid Input\n\n\n";
+        return;
+    }
 
-    if(hour == -1){
+
+    // converting hour to slot
+    int slot = hourToSlot(hour);
+
+
+
+    //validating hour
+    if(slot == -1){
         cout << "Invalid Hour \n\n";
         return;
     }
 
+
+    //heading
+    cout << "Available tables at " << slotToHour(slot) << ":00\n";
+
+
     for (int i = 0; i < numTables; i++){
-        cout << "Table " << i + 1 << ": " << (isAvailable(i, hour) ? "Available with " + to_string(capacity[i]) + " seats" : "Reserved") << "\n";
+        cout << "Table " << i + 1 << ": " << (isAvailable(i, slot) ? "Available with " + to_string(capacity[i]) + " seats" : "Reserved") << "\n";
     }
 
 
 
     int count = 0;
     for (int i = 0; i < numTables; i++){
-        if(isAvailable(i, hour)){
+        if(isAvailable(i, slot)){
             count++;
         }
     }
-    cout << count << " tables available at " << slotToHour(hour) << ":00\n";
+    count == 0 ? cout << "No tables available at " << slotToHour(slot) << ":00\n"
+     :
+    cout << count << " tables available at " << slotToHour(slot) << ":00\n";
 }
 
 void displayRes() {
