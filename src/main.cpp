@@ -2,7 +2,7 @@
  * File: main.cpp
  * Author: Jalen Thornhill
  * Created: 2026-01-06
- * Last Modified: 2026-MAY-7
+ * Last Modified: 2026-MAY-8
  */
 
 #include <iostream>
@@ -23,29 +23,30 @@ using namespace std;
     
     
     
-    vector<vector<string>> resName(numTables, vector<string>(numSlots, avail));
+ vector<vector<string>> resName(numTables, vector<string>(numSlots, avail));
  vector<vector<int>> partySize(numTables, vector<int>(numSlots, 0));
  
+// Boolean helper functions
+inline bool isAvailable(int tableI, int slot);
+bool isTableInCandidates(vector<int>& candidates, int tableIdx);
+
+// Integer helper functions
+int hourToSlot(int hour);
+int slotToHour(int slot);
+int tableNumToIndex(int tableNum);
+int findBestTable(vector<int>& candidates);
+
+// Void reservation setup functions
 void initReservation();
 
-int hourToSlot(int hour);   
-
-int slotToHour(int slot);
-
-inline bool isAvailable(int tableI, int slot);
-
-int tableNumToIndex(int tableNum);
-
-void cancelRes();
+// Void menu option functions
 void makeRes();
-
+void cancelRes();
 void checkAvailabilityAtHour();
-
 void displayRes();
 void hourlyOccupancy();
 
-int findBestTable(vector<int>& candidates);
-bool isTableInCandidates(vector<int>& candidates, int tableIdx);
+// Void display helper functions
 void displayCandidates(vector<int>& candidates);
 
 
@@ -110,78 +111,54 @@ int main() {
     return 0;
 }
 
-
-
-
-
-void initReservation(){
-        resName.assign(numTables,vector<string>(numSlots, avail));
-        partySize.assign(numTables, vector<int>(numSlots, 0));
-}
-
-
-int hourToSlot(int hour){
-
-   return  hour < openHour || hour >= closedHour ? -1 : hour - openHour; 
-}
-
-
-int slotToHour(int slot){
-
-   return  slot < 0 || slot > numSlots - 1 ? -1 : slot + openHour; 
-}
-
-
+// Boolean helper functions
 inline bool isAvailable(int tableI, int slot) {
     return resName[tableI][slot] == avail && partySize[tableI][slot] == 0;
 }
 
+bool isTableInCandidates(vector<int>& candidates, int tableIdx) {
+    for (int t : candidates) {
+        if (t == tableIdx) return true;
+    }
 
-void cancelRes(){
-    int table, hour;
-    cout << "Enter table number to cancel reservation (1-8): \n";
-    cin >> table;
-
-int tableIdx = tableNumToIndex(table);
-try{
-
-
-
-if (tableIdx == -1){
-    throw invalid_argument("Invalid Table Number");
-}
-} catch (const invalid_argument& e){
-    cerr<< e.what() << "\n";
-    return;
-}
-
-    cout << "Enter hour of reservation to cancel (12-22): \n";
-    cin >> hour;
-
-  
-
-
-    if(hourToSlot(hour) == -1){
-        cout << "Invalid Hour\n\n\n";
-        return;
-    } 
-         hour = hourToSlot(hour);
-    
-    
-
-
-   if (resName[tableIdx][hour] == avail){
-    cout << "no reservation to cancel";
-    return;
-   } else {
-    resName[tableIdx][hour] = avail;
-    partySize[tableIdx][hour] = 0;
-    cout << "reservation cancelled successfully\n";
-
-   }
+    return false;
 }
 
 
+//  helper functions
+int hourToSlot(int hour) {
+    return hour < openHour || hour >= closedHour ? -1 : hour - openHour;
+}
+
+int slotToHour(int slot) {
+    return slot < 0 || slot > numSlots - 1 ? -1 : slot + openHour;
+}
+
+int tableNumToIndex(int tableNum) {
+    return tableNum < 1 || tableNum > numTables ? -1 : tableNum - 1;
+}
+
+int findBestTable(vector<int>& candidates) {
+    if (candidates.empty()) return -1;
+
+    int chosen = candidates.at(0);
+
+    for (int c : candidates) {
+        if (capacity[c] < capacity[chosen]) chosen = c;
+    }
+
+    return chosen;
+}
+
+
+//  reservation setup 
+void initReservation() {
+    resName.assign(numTables, vector<string>(numSlots, avail));
+    partySize.assign(numTables, vector<int>(numSlots, 0));
+}
+
+
+// Void menu option functions
 void makeRes(){
     
     int size, hour;
@@ -256,6 +233,58 @@ resName[selectedTable][hour] = name;
 partySize[selectedTable][hour] = size;
 cout << "Reservation made successfully for " << name << " at Table " << selectedTable + 1 << " for a party of " << size << " at " << slotToHour(hour) << ":00\n";
 }
+
+void cancelRes(){
+    int table, hour;
+
+    // ask for table
+    cout << "Enter table number to cancel reservation (1-8): \n";
+    cin >> table;
+
+
+    // convert table to tableIdx
+int tableIdx = tableNumToIndex(table);
+    // if invalid, return
+    try{
+        if (tableIdx == -1){
+        throw invalid_argument("Invalid Table Number");
+        }
+    } catch (const invalid_argument& e){
+         cerr<< e.what() << "\n";
+        return;
+}
+    // ask for hour
+    cout << "Enter hour of reservation to cancel (12-22): \n";
+    cin >> hour;
+
+    // convert hour to slot
+    int slot = hourToSlot(hour);
+
+    // if invalid, return
+    if (slot == -1){
+        cout << "Invalid Hour\n\n\n";
+        cin.get();
+        return;
+    }
+
+    // if available, no reservation exists
+    if(isAvailable(tableIdx, slot)){
+        cout << "No reservation to cancel at Table " << table << " for " << slotToHour(slot) << ":00\n";
+        return;
+    } else{
+    // else clear reservation
+   resName[tableIdx][slot] = avail;
+
+    partySize[tableIdx][slot] = 0;
+    cout << "reservation cancelled successfully\n";
+
+}
+
+
+
+    
+}
+
 void checkAvailabilityAtHour(){
     int hour;
     cout << "Which hour would you like to check availability for? (12-22): \n";
@@ -283,49 +312,25 @@ void checkAvailabilityAtHour(){
     cout << count << " tables available at " << slotToHour(hour) << ":00\n";
 }
 
+void displayRes() {
+    cout << "prototype\n";
+}
 
-int tableNumToIndex(int tableNum){
-  return  tableNum < 1 || tableNum > numTables ? -1: tableNum -1;
+void hourlyOccupancy() {
+    cout << "prototype\n";
 }
 
 
-int findBestTable(vector<int>& candidates){
-    if (candidates.empty()) return -1;
-
-    int chosen = candidates.at(0);
-
-    for(int c : candidates) {
-        if (capacity[c] < capacity[chosen]) chosen = c ;
-    }
-    
-    
-    
-
-    return chosen;
-}
-
-bool isTableInCandidates(vector<int>& candidates, int tableIdx){
-    for(int t : candidates)
-        if (t == tableIdx) return true;
-
-
-    return false;
-}
-
-
-
-void displayCandidates(vector<int>& candidates){
+//  display functions
+void displayCandidates(vector<int>& candidates) {
     cout << "Suitable tables: \n";
-    for(int t : candidates){
-       cout << "Table " << t + 1 << " (Seats: " << capacity[t] << ") \n";
+
+    for (int t : candidates) {
+        cout << "Table " << t + 1 << " (Seats: " << capacity[t] << ") \n";
     }
+
     cout << "\n";
 }
 
-void displayRes(){
- cout<< "ptototypee\n";
-}
 
-void hourlyOccupancy(){
-    cout << "prototype\n";
-}
+
