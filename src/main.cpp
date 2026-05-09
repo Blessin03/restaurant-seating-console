@@ -335,8 +335,45 @@ void checkAvailabilityAtHour(){
 }
 
 void displayRes() {
-    cout << "prototype\n";
+    int table, hour;
+
+    // ask for table number
+        cout << "Enter table number to display reservations for (1-" << numTables << "): \n";
+        cin >> table;
+        // check if input failed
+        if (cin.fail()) {
+            cin.clear();
+            cin.ignore(1000, '\n');
+            cout << "Invalid Input\n\n\n";
+            return;
+        }
+    // convert table number to table index
+        int tableidx = tableNumToIndex(table);
+    // validate table index
+        if (tableidx == -1) {
+            cout << "invalid Table";
+            return;
+        }
+    // print heading for that table
+        cout << "Reservations for table " << table << "\n\n";
+        cout << "Capacity: " << capacity[tableidx]; 
+    // loop through all slots
+    for( int slot = 0 ;slot < numSlots-0; slot++ ){
+
+        // get hour label using slotToHour(slot)
+        hour = slotToHour(slot);
+
+        if (isAvailable(tableidx, slot)){
+            cout << "available \n";
+        } else {
+            cout << resName[tableidx][slot] << " (Party of " << partySize[tableidx][slot] << ")\n";
+        }
+        
+    }
+
+ 
 }
+
 
 void hourlyOccupancy() {
     cout << "prototype\n";
