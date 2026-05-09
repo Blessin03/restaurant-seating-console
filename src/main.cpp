@@ -2,7 +2,7 @@
  * File: main.cpp
  * Author: Jalen Thornhill
  * Created: 2026-01-06
- * Last Modified: 2026-MAY-8
+ * Last Modified: 2026-MAY-9
  */
 
 #include <iostream>
@@ -376,8 +376,40 @@ void displayRes() {
 
 
 void hourlyOccupancy() {
-    cout << "prototype\n";
+   // print report heading
+    cout << "Hourly Occupancy Report\n\n";
+
+
+    // loop through every slot
+    for (int slot = 0; slot < numSlots; slot++){
+        // set occupiedTables to 0
+        int occupiedTables = 0;
+        // set totalGuests to 0
+        int totalGuests = 0;
+
+        // loop through every table
+            for (int table = 0; table < numTables; table++){
+                 // if table is reserved at this slot
+                // increase occupiedTables
+                // add party size to totalGuests
+                if (!isAvailable(table, slot)){
+                    occupiedTables++;
+                    totalGuests += partySize[table][slot];
+                }
+            }
+
+        // calculate availableTables
+        int availableTables = numTables - occupiedTables;
+
+        // calculate utilization percentage
+        double utilization = (double)occupiedTables / numTables * 100;
+
+        // print hour, occupied, available, utilization, total guests
+        cout << slotToHour(slot) << ":00 - Occupied: " << occupiedTables << ", Available: " << availableTables << ", Utilization: " << utilization << "%, Total Guests: " << totalGuests << "\n";
+    }
 }
+
+
 
 
 //  display functions
