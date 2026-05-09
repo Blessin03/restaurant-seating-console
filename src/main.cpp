@@ -356,7 +356,7 @@ void displayRes() {
         }
     // print heading for that table
         cout << "Reservations for table " << table << "\n\n";
-        cout << "Capacity: " << capacity[tableidx]; 
+        cout << "Capacity: " << capacity[tableidx] << " seats\n\n"; 
     // loop through all slots
     for( int slot = 0 ;slot < numSlots-0; slot++ ){
 
@@ -364,9 +364,9 @@ void displayRes() {
         hour = slotToHour(slot);
 
         if (isAvailable(tableidx, slot)){
-            cout << "available \n";
+            cout << hour << ":00 - Available\n\n";
         } else {
-            cout << resName[tableidx][slot] << " (Party of " << partySize[tableidx][slot] << ")\n";
+            cout << hour << ":00 - " << resName[tableidx][slot] << " (Party of " << partySize[tableidx][slot] << ")\n\n";
         }
         
     }
